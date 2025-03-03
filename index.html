@@ -78,42 +78,76 @@
       document.getElementById('tasksContainer').insertAdjacentHTML('beforeend', taskHTML);
     }
 
+    function validateTask(task) {
+      const taskName = task.querySelector('.task_name');
+      const priority = task.querySelector('.priority');
+      const description = task.querySelector('.description');
+      const timeValue = task.querySelector('.time_value');
+      const timeUnit = task.querySelector('.time_unit');
+
+      const showError = (field, message) => {
+        const error = field.nextElementSibling;
+        error.textContent = message;
+        error.classList.remove('hidden');
+        return false;
+      };
+
+      const clearError = (field) => {
+        field.nextElementSibling.classList.add('hidden');
+        return true;
+      };
+
+      let isValid = true;
+
+      if (taskName.value.trim() === '') {
+        isValid = showError(taskName, 'Task Name is required.');
+      } else {
+        clearError(taskName);
+      }
+
+      if (priority.value === '') {
+        isValid = showError(priority, 'Priority is required.');
+      } else {
+        clearError(priority);
+      }
+
+      if (description.value.trim() === '') {
+        isValid = showError(description, 'Description is required.');
+      } else {
+        clearError(description);
+      }
+
+      if (timeValue.value === '' || timeUnit.value === '') {
+        isValid = showError(timeUnit, 'Both time value and unit are required.');
+      } else {
+        clearError(timeUnit);
+      }
+
+      return isValid;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       createTaskForm(); // Ensure first task appears when page loads
 
-      document.getElementById('addTaskButton').addEventListener('click', createTaskForm);
+      document.getElementById('addTaskButton').addEventListener('click', () => {
+        const tasks = document.querySelectorAll('.task');
+        const lastTask = tasks[tasks.length - 1];
+        if (validateTask(lastTask)) {
+          createTaskForm();
+        }
+      });
 
       document.getElementById('taskForm').addEventListener('submit', function (e) {
         e.preventDefault();
-        let valid = true;
+        let allValid = true;
 
         document.querySelectorAll('.task').forEach(task => {
-          const taskName = task.querySelector('.task_name');
-          const priority = task.querySelector('.priority');
-          const description = task.querySelector('.description');
-          const timeValue = task.querySelector('.time_value');
-          const timeUnit = task.querySelector('.time_unit');
-
-          const showError = (field, message) => {
-            const error = field.nextElementSibling;
-            error.textContent = message;
-            error.classList.remove('hidden');
-            valid = false;
-          };
-
-          const clearError = (field) => {
-            field.nextElementSibling.classList.add('hidden');
-          };
-
-          taskName.value.trim() === '' ? showError(taskName, 'Task Name is required.') : clearError(taskName);
-          priority.value === '' ? showError(priority, 'Priority is required.') : clearError(priority);
-          description.value.trim() === '' ? showError(description, 'Description is required.') : clearError(description);
-          (timeValue.value === '' || timeUnit.value === '') ?
-            showError(timeUnit, 'Both time value and unit are required.') :
-            clearError(timeUnit);
+          if (!validateTask(task)) {
+            allValid = false;
+          }
         });
 
-        if (valid) {
+        if (allValid) {
           alert('All tasks are valid and ready to be submitted!');
           // API submit logic here if needed
         }
