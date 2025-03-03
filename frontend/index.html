@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MuseBot Task Form</title>
+  <title>Task Form</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-8">
-  <div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md">
-    <h1 class="text-3xl font-bold mb-6 text-center">MuseBot Task Form</h1>
-    <form id="taskForm">
+
+<body class="bg-gray-100 py-10">
+  <div class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-md">
+    <h1 class="text-3xl font-bold text-center mb-8">Task Form</h1>
+
+    <form id="taskForm" class="space-y-8">
       <div id="tasksContainer"></div>
 
-      <div class="flex justify-between mt-6">
-        <button type="button" onclick="addTask()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
-          ➕ Add Task
+      <div class="flex justify-between">
+        <button type="button" id="addTaskButton"
+          class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
+          Add Task
         </button>
-        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
-          🚀 Submit All
+        <button type="submit"
+          class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+          Submit All
         </button>
       </div>
     </form>
@@ -26,89 +31,95 @@
   <script>
     let taskCount = 0;
 
-    function addTask() {
+    function createTaskForm() {
       taskCount++;
       const taskHTML = `
-        <div class="border p-4 rounded-lg mt-4 bg-gray-50" id="task${taskCount}">
-          <h2 class="text-xl font-semibold mb-4">Task ${taskCount}</h2>
+        <div class="task p-6 border border-gray-300 rounded-lg mb-6 bg-gray-50 space-y-5">
+          <h2 class="text-2xl font-semibold mb-4">Task ${taskCount}</h2>
 
-          <div class="mb-3">
-            <label class="block font-medium">Task Name <span class="text-red-500">*</span></label>
-            <input type="text" name="name" class="w-full p-2 border rounded-lg" required>
+          <div>
+            <label class="block font-medium mb-1">Task Name <span class="text-red-500">*</span></label>
+            <input type="text" name="task_name" class="task_name w-full border p-2 rounded" placeholder="Enter the Task Name">
+            <p class="error-message text-red-500 text-sm hidden">Task Name is required.</p>
           </div>
 
-          <div class="mb-3">
-            <label class="block font-medium">Priority <span class="text-red-500">*</span></label>
-            <select name="priority" class="w-full p-2 border rounded-lg" required>
+          <div>
+            <label class="block font-medium mb-1">Priority <span class="text-red-500">*</span></label>
+            <select name="priority" class="priority w-full border p-2 rounded">
               <option value="">Select Priority</option>
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
+              <option>High</option>
+              <option>Medium</option>
+              <option>Low</option>
             </select>
+            <p class="error-message text-red-500 text-sm hidden">Priority is required.</p>
           </div>
 
-          <div class="mb-3">
-            <label class="block font-medium">Description <span class="text-red-500">*</span></label>
-            <textarea name="description" class="w-full p-2 border rounded-lg" rows="3" required></textarea>
+          <div>
+            <label class="block font-medium mb-1">Description <span class="text-red-500">*</span></label>
+            <textarea name="description" class="description w-full border p-2 rounded" placeholder="Enter a detailed description"></textarea>
+            <p class="error-message text-red-500 text-sm hidden">Description is required.</p>
           </div>
 
-          <div class="mb-3">
-            <label class="block font-medium">Estimated Time <span class="text-red-500">*</span></label>
-            <div class="flex gap-2">
-              <input type="number" name="timeValue" class="w-1/2 p-2 border rounded-lg" min="1" placeholder="Enter time" required>
-              <select name="timeUnit" class="w-1/2 p-2 border rounded-lg" required>
+          <div>
+            <label class="block font-medium mb-1">Estimated Time <span class="text-red-500">*</span></label>
+            <div class="flex gap-3">
+              <input type="number" min="1" name="time_value" class="time_value w-full border p-2 rounded"
+                placeholder="Enter time">
+              <select name="time_unit" class="time_unit border p-2 rounded">
                 <option value="">Select Unit</option>
-                <option value="Minutes">Minutes</option>
-                <option value="Hours">Hours</option>
+                <option>Minutes</option>
+                <option>Hours</option>
               </select>
             </div>
+            <p class="error-message text-red-500 text-sm hidden">Both time value and unit are required.</p>
           </div>
-        </div>`;
+        </div>
+      `;
       document.getElementById('tasksContainer').insertAdjacentHTML('beforeend', taskHTML);
     }
 
-    document.getElementById('taskForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const tasks = [];
-      let valid = true;
-      let errorMessages = [];
+    document.addEventListener('DOMContentLoaded', () => {
+      createTaskForm(); // Ensure first task appears when page loads
 
-      document.querySelectorAll('#tasksContainer > div').forEach((taskDiv, index) => {
-        const name = taskDiv.querySelector('input[name="name"]').value.trim();
-        const priority = taskDiv.querySelector('select[name="priority"]').value;
-        const description = taskDiv.querySelector('textarea[name="description"]').value.trim();
-        const timeValue = taskDiv.querySelector('input[name="timeValue"]').value;
-        const timeUnit = taskDiv.querySelector('select[name="timeUnit"]').value;
+      document.getElementById('addTaskButton').addEventListener('click', createTaskForm);
 
-        if (!name || !priority || !description || !timeValue || !timeUnit) {
-          valid = false;
-          errorMessages.push(`❌ Task ${index + 1}: Please fill all required fields.`);
-        } else {
-          tasks.push({
-            name,
-            priority,
-            description,
-            estimated_time: `${timeValue} ${timeUnit}`
-          });
+      document.getElementById('taskForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        let valid = true;
+
+        document.querySelectorAll('.task').forEach(task => {
+          const taskName = task.querySelector('.task_name');
+          const priority = task.querySelector('.priority');
+          const description = task.querySelector('.description');
+          const timeValue = task.querySelector('.time_value');
+          const timeUnit = task.querySelector('.time_unit');
+
+          const showError = (field, message) => {
+            const error = field.nextElementSibling;
+            error.textContent = message;
+            error.classList.remove('hidden');
+            valid = false;
+          };
+
+          const clearError = (field) => {
+            field.nextElementSibling.classList.add('hidden');
+          };
+
+          taskName.value.trim() === '' ? showError(taskName, 'Task Name is required.') : clearError(taskName);
+          priority.value === '' ? showError(priority, 'Priority is required.') : clearError(priority);
+          description.value.trim() === '' ? showError(description, 'Description is required.') : clearError(description);
+          (timeValue.value === '' || timeUnit.value === '') ?
+            showError(timeUnit, 'Both time value and unit are required.') :
+            clearError(timeUnit);
+        });
+
+        if (valid) {
+          alert('All tasks are valid and ready to be submitted!');
+          // API submit logic here if needed
         }
       });
-
-      if (!valid) {
-        alert(errorMessages.join('\n'));
-        return;
-      }
-
-      fetch('https://your-backend-api-url/api/tasks', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tasks })
-      })
-      .then(response => response.json())
-      .then(data => alert('✅ Tasks submitted successfully!'))
-      .catch(error => alert('❌ Failed to submit tasks.'));
     });
-
-    window.onload = addTask; // Add the first task by default
   </script>
 </body>
+
 </html>
