@@ -3,22 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Updation Form</title>
-  <script defer src="script.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title>Task Form</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-10">
-  <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow">
-    <h1 class="text-2xl font-bold mb-4">Task Updation</h1>
-    <form id="taskForm">
-      <div id="tasksContainer">
-        <div class="task mb-3">
-          <input type="text" name="task" placeholder="Enter task" class="w-full p-2 border rounded">
-        </div>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+  <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg">
+    <h1 class="text-2xl font-bold mb-6 text-center">Add a New Task</h1>
+
+    <form id="taskForm" class="space-y-5">
+      
+      <!-- Task Name -->
+      <div>
+        <label for="taskName" class="block text-sm font-medium text-gray-700">Task Name:</label>
+        <input type="text" id="taskName" name="taskName" placeholder="Enter the Task Name"
+          class="mt-1 block w-full px-4 py-2 border rounded-xl focus:ring-blue-500 focus:border-blue-500 border-gray-300">
       </div>
-      <button type="button" id="addTaskBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Add Task</button>
-      <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded ml-2">Submit All</button>
+
+      <!-- Priority -->
+      <div>
+        <label for="priority" class="block text-sm font-medium text-gray-700">Priority:</label>
+        <select id="priority" name="priority"
+          class="mt-1 block w-full px-4 py-2 border rounded-xl focus:ring-blue-500 focus:border-blue-500 border-gray-300">
+          <option>High</option>
+          <option>Medium</option>
+          <option>Low</option>
+        </select>
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label for="description" class="block text-sm font-medium text-gray-700">Description:</label>
+        <textarea id="description" name="description" placeholder="Enter a detailed description of the task to be performed"
+          class="mt-1 block w-full px-4 py-2 border rounded-xl focus:ring-blue-500 focus:border-blue-500 border-gray-300"></textarea>
+      </div>
+
+      <!-- Estimated Time -->
+      <div>
+        <label for="estimatedTime" class="block text-sm font-medium text-gray-700">Estimated Time (In Minutes/Hours):</label>
+        <input type="text" id="estimatedTime" name="estimatedTime" placeholder="Enter the estimated time"
+          class="mt-1 block w-full px-4 py-2 border rounded-xl focus:ring-blue-500 focus:border-blue-500 border-gray-300">
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit"
+        class="w-full bg-blue-600 text-white py-2 px-4 rounded-xl hover:bg-blue-700 transition">Submit Task</button>
+
     </form>
   </div>
+
 </body>
 </html>
