@@ -19,14 +19,15 @@
 
         <div>
           <label class="block text-sm font-medium text-gray-700">Task Name:</label>
-          <input type="text" name="taskName" placeholder="Enter the Task Name"
+          <input type="text" name="taskName" placeholder="Enter the Task Name" required
             class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300">
         </div>
 
         <div>
           <label class="block text-sm font-medium text-gray-700">Priority:</label>
-          <select name="priority"
+          <select name="priority" required
             class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300">
+            <option value="">Select Priority</option>
             <option>High</option>
             <option>Medium</option>
             <option>Low</option>
@@ -35,14 +36,22 @@
 
         <div>
           <label class="block text-sm font-medium text-gray-700">Description:</label>
-          <textarea name="description" placeholder="Enter a detailed description of the task"
+          <textarea name="description" placeholder="Enter a detailed description of the task" required
             class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300"></textarea>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700">Estimated Time (In Minutes/Hours):</label>
-          <input type="text" name="estimatedTime" placeholder="Enter the estimated time"
-            class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300">
+          <label class="block text-sm font-medium text-gray-700">Estimated Time:</label>
+          <div class="flex gap-2 mt-1">
+            <input type="number" name="estimatedTimeValue" placeholder="Enter time" min="1" required
+              class="w-1/2 px-4 py-2 border rounded-xl border-gray-300">
+            <select name="estimatedTimeUnit" required
+              class="w-1/2 px-4 py-2 border rounded-xl border-gray-300">
+              <option value="">Select Unit</option>
+              <option>Minutes</option>
+              <option>Hours</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
@@ -76,14 +85,15 @@
 
         <div>
           <label class="block text-sm font-medium text-gray-700">Task Name:</label>
-          <input type="text" name="taskName" placeholder="Enter the Task Name"
+          <input type="text" name="taskName" placeholder="Enter the Task Name" required
             class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300">
         </div>
 
         <div>
           <label class="block text-sm font-medium text-gray-700">Priority:</label>
-          <select name="priority"
+          <select name="priority" required
             class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300">
+            <option value="">Select Priority</option>
             <option>High</option>
             <option>Medium</option>
             <option>Low</option>
@@ -92,14 +102,22 @@
 
         <div>
           <label class="block text-sm font-medium text-gray-700">Description:</label>
-          <textarea name="description" placeholder="Enter a detailed description of the task"
+          <textarea name="description" placeholder="Enter a detailed description of the task" required
             class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300"></textarea>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700">Estimated Time (In Minutes/Hours):</label>
-          <input type="text" name="estimatedTime" placeholder="Enter the estimated time"
-            class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300">
+          <label class="block text-sm font-medium text-gray-700">Estimated Time:</label>
+          <div class="flex gap-2 mt-1">
+            <input type="number" name="estimatedTimeValue" placeholder="Enter time" min="1" required
+              class="w-1/2 px-4 py-2 border rounded-xl border-gray-300">
+            <select name="estimatedTimeUnit" required
+              class="w-1/2 px-4 py-2 border rounded-xl border-gray-300">
+              <option value="">Select Unit</option>
+              <option>Minutes</option>
+              <option>Hours</option>
+            </select>
+          </div>
         </div>
       `;
       tasksContainer.appendChild(newTaskForm);
@@ -109,14 +127,20 @@
       const taskForms = document.querySelectorAll('.task-form');
       const tasks = [];
 
-      taskForms.forEach(form => {
-        const taskName = form.querySelector('input[name="taskName"]').value;
+      for (const form of taskForms) {
+        const taskName = form.querySelector('input[name="taskName"]').value.trim();
         const priority = form.querySelector('select[name="priority"]').value;
-        const description = form.querySelector('textarea[name="description"]').value;
-        const estimatedTime = form.querySelector('input[name="estimatedTime"]').value;
+        const description = form.querySelector('textarea[name="description"]').value.trim();
+        const estimatedTimeValue = form.querySelector('input[name="estimatedTimeValue"]').value;
+        const estimatedTimeUnit = form.querySelector('select[name="estimatedTimeUnit"]').value;
 
-        tasks.push({ taskName, priority, description, estimatedTime });
-      });
+        if (!taskName || !priority || !description || !estimatedTimeValue || !estimatedTimeUnit) {
+          alert('Please fill all fields for each task.');
+          return;
+        }
+
+        tasks.push({ taskName, priority, description, estimatedTime: `${estimatedTimeValue} ${estimatedTimeUnit}` });
+      }
 
       console.log('Submitting tasks:', tasks);
 
