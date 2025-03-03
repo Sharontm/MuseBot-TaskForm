@@ -8,49 +8,129 @@
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-  <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg">
-    <h1 class="text-2xl font-bold mb-6 text-center">Add a New Task</h1>
+  <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-3xl">
+    <h1 class="text-3xl font-bold mb-6 text-center">Add Multiple Tasks</h1>
 
-    <form id="taskForm" class="space-y-5">
-      
-      <!-- Task Name -->
-      <div>
-        <label for="taskName" class="block text-sm font-medium text-gray-700">Task Name:</label>
-        <input type="text" id="taskName" name="taskName" placeholder="Enter the Task Name"
-          class="mt-1 block w-full px-4 py-2 border rounded-xl focus:ring-blue-500 focus:border-blue-500 border-gray-300">
+    <!-- Tasks Container -->
+    <div id="tasksContainer" class="space-y-6">
+      <!-- First Task Form -->
+      <div class="task-form space-y-5 p-5 border rounded-xl bg-gray-50">
+        <h2 class="text-xl font-semibold">Task 1</h2>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Task Name:</label>
+          <input type="text" name="taskName" placeholder="Enter the Task Name"
+            class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Priority:</label>
+          <select name="priority"
+            class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300">
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Description:</label>
+          <textarea name="description" placeholder="Enter a detailed description of the task"
+            class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Estimated Time (In Minutes/Hours):</label>
+          <input type="text" name="estimatedTime" placeholder="Enter the estimated time"
+            class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300">
+        </div>
       </div>
+    </div>
 
-      <!-- Priority -->
-      <div>
-        <label for="priority" class="block text-sm font-medium text-gray-700">Priority:</label>
-        <select id="priority" name="priority"
-          class="mt-1 block w-full px-4 py-2 border rounded-xl focus:ring-blue-500 focus:border-blue-500 border-gray-300">
-          <option>High</option>
-          <option>Medium</option>
-          <option>Low</option>
-        </select>
-      </div>
+    <!-- Buttons -->
+    <div class="flex justify-end mt-6 space-x-3">
+      <button type="button" id="addTaskButton"
+        class="bg-green-600 text-white py-2 px-4 rounded-xl hover:bg-green-700 transition">
+        Add Task
+      </button>
+      <button type="button" id="submitAllButton"
+        class="bg-blue-600 text-white py-2 px-4 rounded-xl hover:bg-blue-700 transition">
+        Submit All
+      </button>
+    </div>
 
-      <!-- Description -->
-      <div>
-        <label for="description" class="block text-sm font-medium text-gray-700">Description:</label>
-        <textarea id="description" name="description" placeholder="Enter a detailed description of the task to be performed"
-          class="mt-1 block w-full px-4 py-2 border rounded-xl focus:ring-blue-500 focus:border-blue-500 border-gray-300"></textarea>
-      </div>
-
-      <!-- Estimated Time -->
-      <div>
-        <label for="estimatedTime" class="block text-sm font-medium text-gray-700">Estimated Time (In Minutes/Hours):</label>
-        <input type="text" id="estimatedTime" name="estimatedTime" placeholder="Enter the estimated time"
-          class="mt-1 block w-full px-4 py-2 border rounded-xl focus:ring-blue-500 focus:border-blue-500 border-gray-300">
-      </div>
-
-      <!-- Submit Button -->
-      <button type="submit"
-        class="w-full bg-blue-600 text-white py-2 px-4 rounded-xl hover:bg-blue-700 transition">Submit Task</button>
-
-    </form>
   </div>
+
+  <script>
+    const tasksContainer = document.getElementById('tasksContainer');
+    const addTaskButton = document.getElementById('addTaskButton');
+    const submitAllButton = document.getElementById('submitAllButton');
+    let taskCount = 1;
+
+    addTaskButton.addEventListener('click', () => {
+      taskCount++;
+      const newTaskForm = document.createElement('div');
+      newTaskForm.classList.add('task-form', 'space-y-5', 'p-5', 'border', 'rounded-xl', 'bg-gray-50');
+      newTaskForm.innerHTML = `
+        <h2 class="text-xl font-semibold">Task ${taskCount}</h2>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Task Name:</label>
+          <input type="text" name="taskName" placeholder="Enter the Task Name"
+            class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Priority:</label>
+          <select name="priority"
+            class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300">
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Description:</label>
+          <textarea name="description" placeholder="Enter a detailed description of the task"
+            class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Estimated Time (In Minutes/Hours):</label>
+          <input type="text" name="estimatedTime" placeholder="Enter the estimated time"
+            class="mt-1 block w-full px-4 py-2 border rounded-xl border-gray-300">
+        </div>
+      `;
+      tasksContainer.appendChild(newTaskForm);
+    });
+
+    submitAllButton.addEventListener('click', () => {
+      const taskForms = document.querySelectorAll('.task-form');
+      const tasks = [];
+
+      taskForms.forEach(form => {
+        const taskName = form.querySelector('input[name="taskName"]').value;
+        const priority = form.querySelector('select[name="priority"]').value;
+        const description = form.querySelector('textarea[name="description"]').value;
+        const estimatedTime = form.querySelector('input[name="estimatedTime"]').value;
+
+        tasks.push({ taskName, priority, description, estimatedTime });
+      });
+
+      console.log('Submitting tasks:', tasks);
+
+      // TODO: Replace with your actual API endpoint
+      fetch('/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tasks })
+      })
+      .then(response => response.json())
+      .then(data => alert('Tasks submitted successfully!'))
+      .catch(error => alert('Error submitting tasks.'));
+    });
+  </script>
 
 </body>
 </html>
