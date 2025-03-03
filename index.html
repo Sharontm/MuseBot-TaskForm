@@ -1,43 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Form</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Form</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Task Submission Form</h1>
-        <form id="taskForm">
-            <div id="tasksContainer">
-                <div class="task">
-                    <h3>Task 1</h3>
-                    <label>Task Name:<input type="text" name="taskName" required></label>
-                    <label>Priority:
-                        <select name="priority" required>
-                            <option value="">Select Priority</option>
-                            <option value="High">High</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Low">Low</option>
-                        </select>
-                    </label>
-                    <label>Description:<textarea name="description" required></textarea></label>
-                    <label>Estimated Time:
-                        <input type="number" name="estimatedTime" min="1" required>
-                        <select name="timeUnit" required>
-                            <option value="">Select Unit</option>
-                            <option value="Minutes">Minutes</option>
-                            <option value="Hours">Hours</option>
-                        </select>
-                    </label>
-                </div>
-            </div>
-            <button type="button" id="addTaskButton">Add Task</button>
-            <button type="submit">Submit All</button>
-        </form>
-        <div id="response"></div>
-    </div>
-    <script src="script.js"></script>
+  <h1>Task Entry Form</h1>
+  <form id="taskForm">
+    <div id="tasksContainer"></div>
+    <button type="button" id="addTaskBtn">Add Task</button>
+    <button type="submit" id="submitBtn">Submit All</button>
+  </form>
+
+  <script src="script.js"></script>
 </body>
 </html>
