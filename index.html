@@ -99,24 +99,28 @@
 
       let isValid = true;
 
+      // Validate Task Name
       if (taskName.value.trim() === '') {
         isValid = showError(taskName, 'Task Name is required.');
       } else {
         clearError(taskName);
       }
 
+      // Validate Priority
       if (priority.value === '') {
         isValid = showError(priority, 'Priority is required.');
       } else {
         clearError(priority);
       }
 
+      // Validate Description
       if (description.value.trim() === '') {
         isValid = showError(description, 'Description is required.');
       } else {
         clearError(description);
       }
 
+      // Validate Estimated Time
       if (timeValue.value === '' || timeUnit.value === '') {
         isValid = showError(timeUnit, 'Both time value and unit are required.');
       } else {
@@ -129,14 +133,19 @@
     document.addEventListener('DOMContentLoaded', () => {
       createTaskForm(); // Ensure first task appears when page loads
 
+      // Add Task Button: Validate current task before adding a new one
       document.getElementById('addTaskButton').addEventListener('click', () => {
         const tasks = document.querySelectorAll('.task');
-        const lastTask = tasks[tasks.length - 1];
-        if (validateTask(lastTask)) {
+        const currentTask = tasks[tasks.length - 1];
+
+        if (validateTask(currentTask)) {
           createTaskForm();
+        } else {
+          alert('Please fill all mandatory fields in the current task before adding a new one.');
         }
       });
 
+      // Submit Form: Validate all tasks before submission
       document.getElementById('taskForm').addEventListener('submit', function (e) {
         e.preventDefault();
         let allValid = true;
@@ -150,6 +159,8 @@
         if (allValid) {
           alert('All tasks are valid and ready to be submitted!');
           // API submit logic here if needed
+        } else {
+          alert('Please fill all mandatory fields in all tasks before submitting.');
         }
       });
     });
