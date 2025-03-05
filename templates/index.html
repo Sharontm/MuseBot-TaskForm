@@ -12,19 +12,22 @@
   <div class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-md">
     <h1 class="text-3xl font-bold text-center mb-8">Task Form</h1>
 
-    <form id="taskForm" class="space-y-8">
-      <div id="tasksContainer"></div>
-
-      <div class="flex justify-between">
-        <button type="button" id="addTaskButton"
-          class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
-          Add Task
-        </button>
-        <button type="submit"
-          class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-          Submit All
-        </button>
-      </div>
+    <form id="taskForm" class="space-y-8" action="/submit" method="POST">
+        <input type="hidden" name="user_id" value="{{ user_id }}">
+        <input type="hidden" name="task_count" id="taskCountInput">
+      
+        <div id="tasksContainer"></div>
+      
+        <div class="flex justify-between">
+          <button type="button" id="addTaskButton"
+            class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
+            Add Task
+          </button>
+          <button type="submit"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+            Submit All
+          </button>
+        </div>
     </form>
   </div>
 
@@ -80,6 +83,7 @@
 
     function validateAllTasks() {
       let isValid = true;
+      const tasks = [];
 
       document.querySelectorAll('.task').forEach(task => {
         const taskName = task.querySelector('.task_name');
@@ -126,27 +130,61 @@
         } else {
           timeError.classList.add('hidden');
         }
+
+        if (isValid) {
+          tasks.push({
+            taskName: taskName.value,
+            priority: priority.value,
+            description: description.value,
+            estimatedTime: {
+              value: timeValue.value,
+              unit: timeUnit.value
+            }
+          });
+        }
       });
 
-      return isValid;
+      return { isValid, tasks };
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      createTaskForm(); // Load first task on page load
+  createTaskForm(); // Load first task on page load
 
-      document.getElementById('addTaskButton').addEventListener('click', () => {
-        createTaskForm();
-      });
+  document.getElementById('addTaskButton').addEventListener('click', () => {
+    createTaskForm();
+  });
 
-      document.getElementById('taskForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        if (validateAllTasks()) {
-          alert('All tasks are valid and ready for submission!');
-        } else {
-          alert('Please fill out all required fields in every task.');
-        }
-      });
-    });
+  document.getElementById('taskForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const validationResult = validateAllTasks();
+    if (validationResult.isValid) {
+      // Include the task count in the JSON payload
+      const payload = {
+        user_id: document.querySelector('input[name="user_id"]').value,
+        task_count: taskCount,
+        tasks: validationResult.tasks,
+      };
+
+      fetch(`/submit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+        .then(response => response.json())
+        .then(data => {
+          alert('Tasks submitted successfully!');
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    } else {
+      alert('Please fill out all required fields in every task.');
+    }
+  });
+});
   </script>
 </body>
 
