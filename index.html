@@ -4,13 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Form</title>
+  <title>Daily Task Form</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-gray-100 py-10">
   <div class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-md">
-    <h1 class="text-3xl font-bold text-center mb-8">Task Form</h1>
+    <h1 class="text-3xl font-bold text-center mb-8">Daily Task Form</h1>
 
     <form id="taskForm" class="space-y-8" action="/submit" method="POST">
         <input type="hidden" name="user_id" value="{{ user_id }}">
@@ -22,6 +22,10 @@
           <button type="button" id="addTaskButton"
             class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
             Add Task
+          </button>
+          <button type="button" id="removeTaskButton"
+            class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
+            Remove Last Task
           </button>
           <button type="submit"
             class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
@@ -35,10 +39,12 @@
     let taskCount = 0;
 
     function createTaskForm() {
-      taskCount++;
+      const currentTasks = document.querySelectorAll('.task').length;
+      taskCount = currentTasks + 1;
       const taskHTML = `
         <div class="task p-6 border border-gray-300 rounded-lg mb-6 bg-gray-50 space-y-5">
           <h2 class="text-2xl font-semibold mb-4">Task ${taskCount}</h2>
+          
 
           <div>
             <label class="block font-medium mb-1">Task Name <span class="text-red-500">*</span></label>
@@ -80,6 +86,23 @@
       `;
       document.getElementById('tasksContainer').insertAdjacentHTML('beforeend', taskHTML);
     }
+
+    function removeLastTask() {
+  const tasks = document.querySelectorAll('.task');
+  if (tasks.length > 0) {
+    tasks[tasks.length - 1].remove();
+    taskCount--;
+  } else {
+    alert('No tasks to remove!');
+  }
+}
+
+function updateTaskNumbers() {
+  const tasks = document.querySelectorAll('.task');
+  tasks.forEach((task, index) => {
+    task.querySelector('h2').textContent = `Task ${index + 1}`;
+  });
+}
 
     function validateAllTasks() {
       let isValid = true;
@@ -153,6 +176,8 @@
   document.getElementById('addTaskButton').addEventListener('click', () => {
     createTaskForm();
   });
+  document.getElementById('removeTaskButton').addEventListener('click', removeLastTask);
+
 
   document.getElementById('taskForm').addEventListener('submit', (e) => {
     e.preventDefault();
